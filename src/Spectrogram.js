@@ -1,7 +1,17 @@
+// Spectrogram.js
 import React, { useEffect } from "react";
 import p5 from "p5";
+import "p5/lib/addons/p5.sound";
 
 const Spectrogram = () => {
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Handle the selected audio file here
+      console.log("Selected audio file:", file);
+    }
+  };
+
   useEffect(() => {
     const sketch = (p) => {
       let mic;
@@ -12,7 +22,7 @@ const Spectrogram = () => {
         mic = new p5.AudioIn();
         mic.start();
         fft = new p5.FFT();
-        fft.setup(mic);
+        fft.setInput(mic);
       };
 
       p.draw = () => {
@@ -27,14 +37,15 @@ const Spectrogram = () => {
         }
       };
     };
+
     new p5(sketch);
   }, []);
-  //
 
   return (
     <div>
       <h1>Basic Spectrogram</h1>
       <div id="canvas-container"></div>
+      <input type="file" accept="audio/*" onChange={handleFileChange} />
     </div>
   );
 };
